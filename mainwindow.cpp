@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QFileDialog>
+#include <QDebug>
 
 void MainWindow::initMainWindow()
 {
@@ -14,6 +15,26 @@ void MainWindow::initMainWindow()
     ui->orderComboBox->addItem("2");
     ui->orderComboBox->addItem("3");
     ui->orderComboBox->setCurrentIndex(3);
+
+    //设置区域是否可以编辑
+    Case_Opened_ = false;
+    ui->settingScrollArea->setEnabled(Case_Opened_);
+}
+
+void MainWindow::initUiState(uiState state)
+{
+    switch (state)
+    {
+    case caseClose:
+        ui->settingScrollArea->setEnabled(Case_Opened_);
+        break;
+    case caseOpenStop:
+        ui->settingScrollArea->setEnabled(Case_Opened_);
+        break;
+    case caseOpenRun:
+        ui->settingScrollArea->setEnabled(Case_Opened_);
+        break;
+    }
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -23,6 +44,15 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     initMainWindow();
+
+    //新建算例
+    connect(ui->actionNew, &QAction::triggered, this, [=](){
+        if (Case_Opened_) {
+
+        }
+        Case_Opened_ = true;
+        initUiState(caseOpenStop);
+    });
 
     //加载网格数据
     connect(ui->actionLoad, &QAction::triggered, this, &MainWindow::LoadGrid);
